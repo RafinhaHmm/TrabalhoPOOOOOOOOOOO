@@ -120,6 +120,29 @@ public class Lista {
         }
     }
 
+    public void InsercaoBinaria()
+    {
+
+    }
+
+    public void selecaoDiretaa() {
+
+    }
+
+    public void Bolha()
+    {
+
+    }
+
+    public void Shake()
+    {
+
+    }
+
+    public void Comb(){}
+    public void Gnome(){}
+    public void Tim(){}
+
     /// Ordenacoes Fiori
     public void ShellSort()
     {
@@ -154,39 +177,19 @@ public class Lista {
         }
     }
 
-    public void selecaoDiretaa()
-    {
-        int menor, posmenor;
-        for (int i = 0; i < TL-1; i++)
-        {
-            menor = vet[i];
-            posmenor = i;
-            for (int j = i+1; j < TL; j++)
-            {
-                if(vet[j]<menor)
-                {
-                    menor=vet[j];
-                    posmenor=j;
-                }
-                vet[posmenor]=vet[i];
-                vet[i]=menor;
-            }
-        }
-    }
+    public void HeapSort(){}
 
-    public void selecaoDireta()
-    {
-        int menor;
-        No posMenor;
-        No j = inicio;
-        while (j != fim.getAnt())
-        {
-            posMenor = j;
-            menor = j.getNum();
+    public void QuickSemPivo(){}
 
-            No i = j.getProx();
-            while (i != null);
-        }
-    }
+    public void QuickComPivo(){}
 
+    public void FusaoDiretaImp1(){}
+
+    public void FusaoDiretaImp2(){}
+
+    public void Counting(){}
+
+    public void Bucket(){}
+
+    public void Radix(){}
 }
