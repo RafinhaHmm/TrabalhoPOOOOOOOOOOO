@@ -8,6 +8,13 @@ public class Principal {
         Lista lista = new Lista();
         lista.inicializa();
 
+        lista.Randomico();
+        lista.exibe("antes");
+        lista.selecaoDireta();
+        lista.exibe("pós selecao");
+        System.out.println("\n\n");
+
+
         //> SELECAO DIRETA
         System.out.println("------------------------------------------------------------------------------------------------------------------------------");
         //----------- INSERÇÃO DIRETA EM ORDEM

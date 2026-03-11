@@ -97,35 +97,32 @@ public class Lista {
         System.out.println(" ");
     }
 
-    public void selecaoDiretaa()
-    {
-        int menor, posmenor;
-        for (int i = 0; i < TL-1; i++)
-        {
-            menor = vet[i];
-            posmenor = i;
-            for (int j = i+1; j < TL; j++)
-            {
-                if(vet[j]<menor)
-                {
-                    menor=vet[j];
-                    posmenor=j;
-                }
-                vet[posmenor]=vet[i];
-                vet[i]=menor;
-            }
-        }
-    }
-
     //rafa fez isso
     public void selecaoDireta()
     {
-        No i = inicio, menor = null;
+        No i = inicio, PosMenor;
+        int menor, aux;
         while (i != null)
         {
-            menor = i;
+            PosMenor = i;
+            menor = i.getNum();
             No j = i.getProx();
 
+            while (j != null)
+            {
+                if(j.getNum() < menor)
+                {
+                    menor = j.getNum();
+                    PosMenor = j;
+                }
+                j = j.getProx();
+            }
+
+            aux = i.getNum();
+            i.setNum(PosMenor.getNum());
+            PosMenor.setNum(aux);
+
+            i = i.getProx();
         }
 
     }
