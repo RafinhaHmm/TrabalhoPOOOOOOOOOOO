@@ -95,9 +95,8 @@ public class Arquivo
     }
 
     //.............................................................................
-    /*
 
-    insira aqui os m todos de Ordena  o;*/
+    /// Ordenações:
 
     public void ShellSort()
     {
