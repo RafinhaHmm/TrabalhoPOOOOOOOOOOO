@@ -65,7 +65,22 @@ public class Lista {
         }
     }
 
+    public void exibe(String texto)
+    {
+        No i = this.inicio;
+        System.out.println(texto);
+
+        while (i != null)
+        {
+            System.out.printf(i.getNum() + ", ");
+            i = i.getProx();
+        }
+        System.out.println(" ");
+    }
+
     //ordenações
+
+    //rafinha--------------------------
     public void insercao_direta()
     {
         No pi = inicio.getProx(), ppos;
@@ -84,18 +99,7 @@ public class Lista {
         }
     }
 
-    public void exibe(String texto)
-    {
-        No i = this.inicio;
-        System.out.println(texto);
 
-        while (i != null)
-        {
-            System.out.printf(i.getNum() + ", ");
-            i = i.getProx();
-        }
-        System.out.println(" ");
-    }
 
     //rafa fez isso
     public void selecaoDireta()
@@ -125,6 +129,68 @@ public class Lista {
             i = i.getProx();
         }
 
+    }
+
+    public void insercao_binaria()
+    {
+    }
+
+    public void bolha()
+    {
+    }
+
+    public void shake()
+    {
+    }
+
+    public void radix()
+    {
+    }
+
+    public void comb()
+    {
+    }
+
+    public void gnome()
+    {
+    }
+
+    public void tim()
+    {
+    }
+
+    // fiori ------------------
+
+    public void shell()
+    {
+    }
+
+    public void heap()
+    {
+    }
+
+    public void quickComPivo()
+    {
+    }
+
+    public void quickSemPivo()
+    {
+    }
+
+    public void merge1()
+    {
+    }
+
+    public void merge2()
+    {
+    }
+
+    public void counting()
+    {
+    }
+
+    public void bucket()
+    {
     }
 
 }
