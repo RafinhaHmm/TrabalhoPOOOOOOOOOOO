@@ -97,4 +97,39 @@ public class Lista {
         System.out.println(" ");
     }
 
+    public void selecaoDiretaa()
+    {
+        int menor, posmenor;
+        for (int i = 0; i < TL-1; i++)
+        {
+            menor = vet[i];
+            posmenor = i;
+            for (int j = i+1; j < TL; j++)
+            {
+                if(vet[j]<menor)
+                {
+                    menor=vet[j];
+                    posmenor=j;
+                }
+                vet[posmenor]=vet[i];
+                vet[i]=menor;
+            }
+        }
+    }
+
+    public void selecaoDireta()
+    {
+        int menor;
+        No posMenor;
+        No j = inicio;
+        while (j != fim.getAnt())
+        {
+            posMenor = j;
+            menor = j.getNum();
+
+            No i = j.getProx();
+            while (i != null);
+        }
+    }
+
 }
