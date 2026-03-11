@@ -149,7 +149,6 @@ public class Lista {
                 }
                 aux1.setNum(auxNum);
                 i++;
-                aux1 = NoIndice(i);
             }
             dist = dist/3;
         }
