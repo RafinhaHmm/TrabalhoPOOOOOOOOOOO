@@ -3,7 +3,7 @@ package ordenacoes.lista;
 public class No {
     private No prox;
     private No ant;
-    int num;
+    private int num;
 
     public No(int num)
     {

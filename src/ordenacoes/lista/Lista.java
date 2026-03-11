@@ -37,7 +37,7 @@ public class Lista {
     {
         this.inicializa();
 
-        for (int i = 1; i < 50; i++)
+        for (int i = 1; i < 31; i++)
         {
             this.insereInicio(i);
         }
@@ -47,7 +47,7 @@ public class Lista {
     {
         this.inicializa();
 
-        for (int i = 50; i > 0; i--)
+        for (int i = 30; i > 0; i--)
         {
             this.insereInicio(i);
         }
@@ -58,13 +58,14 @@ public class Lista {
         Random rand = new Random();
         this.inicializa();
 
-        for (int i = 1; i < 50; i++)
+        for (int i = 1; i < 31; i++)
         {
             int num = rand.nextInt(99);
             this.insereInicio(num);
         }
     }
 
+    //ordenações
     public void insercao_direta()
     {
         No pi = inicio.getProx(), ppos;
@@ -82,4 +83,18 @@ public class Lista {
             pi=pi.getProx();
         }
     }
+
+    public void exibe(String texto)
+    {
+        No i = this.inicio;
+        System.out.println(texto);
+
+        while (i != null)
+        {
+            System.out.printf(i.getNum() + ", ");
+            i = i.getProx();
+        }
+        System.out.println(" ");
+    }
+
 }
