@@ -117,19 +117,17 @@ public class Lista {
         }
     }
 
+    //rafa fez isso
     public void selecaoDireta()
     {
-        int menor;
-        No posMenor;
-        No j = inicio;
-        while (j != fim.getAnt())
+        No i = inicio, menor = null;
+        while (i != null)
         {
-            posMenor = j;
-            menor = j.getNum();
+            menor = i;
+            No j = i.getProx();
 
-            No i = j.getProx();
-            while (i != null);
         }
+
     }
 
 }
