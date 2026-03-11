@@ -1,3 +1,5 @@
+package ordenacoes.lista;
+
 import java.util.Random;
 
 public class Lista {
@@ -8,16 +10,16 @@ public class Lista {
         this.inicio = null;
         this.fim = null;
     }
-    public No criaNo(Registro reg)
+    public No criaNo(int num)
     {
-        No no = new No(reg);
+        No no = new No(num);
         no.setProx(null);
         no.setAnt(null);
         return no;
     }
-    public void insereInicio(Registro reg)
+    public void insereInicio(int num)
     {
-        No no = criaNo(reg);
+        No no = criaNo(num);
         if (inicio == null) //lista vazia
         {
             fim = no;
@@ -37,8 +39,7 @@ public class Lista {
 
         for (int i = 1; i < 50; i++)
         {
-            Registro regi = new Registro(i);
-            this.insereInicio(regi);
+            this.insereInicio(i);
         }
     }
 
@@ -48,8 +49,7 @@ public class Lista {
 
         for (int i = 50; i > 0; i--)
         {
-            Registro regi = new Registro(i);
-            this.insereInicio(regi);
+            this.insereInicio(i);
         }
     }
 
@@ -61,8 +61,7 @@ public class Lista {
         for (int i = 1; i < 50; i++)
         {
             int num = rand.nextInt(99);
-            Registro regi = new Registro(num);
-            this.insereInicio(regi);
+            this.insereInicio(num);
         }
     }
 
@@ -72,17 +71,15 @@ public class Lista {
         int aux;
         while(pi != null)
         {
-            aux = pi.getReg().getNumero();
+            aux = pi.getNum();
             ppos = pi;
-            while(ppos != inicio && aux < ppos.getAnt().getReg().getNumero())
+            while(ppos != inicio && aux < ppos.getAnt().getNum())
             {
-                ppos.setReg(ppos.getAnt().getReg());
+                ppos.setNum(ppos.getAnt().getNum());
                 ppos = ppos.getAnt();
             }
-            Registro reg = new Registro(aux);
-            ppos.setReg(reg);
+            ppos.setNum(aux);
             pi=pi.getProx();
         }
     }
-
 }

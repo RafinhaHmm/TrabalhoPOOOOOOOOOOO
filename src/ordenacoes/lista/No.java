@@ -1,13 +1,27 @@
+package ordenacoes.lista;
+
 public class No {
     private No prox;
     private No ant;
-    private Registro reg;
+    int num;
 
-    public No(Registro reg)
+    public No(int num)
     {
         this.prox = null;
         this.ant = null;
-        this.reg = reg;
+        setNum(num);
+    }
+
+    public int getNum()
+    {
+        return this.num;
+    }
+    public void setNum(int num)
+    {
+        if (num > 0)
+            this.num = num;
+        else
+            this.num = num*(-1);
     }
 
     public No getAnt()
@@ -27,11 +41,4 @@ public class No {
         this.ant = no;
     }
 
-    public Registro getReg() {
-        return this.reg;
-    }
-
-    public void setReg(Registro reg) {
-        this.reg = reg;
-    }
 }
