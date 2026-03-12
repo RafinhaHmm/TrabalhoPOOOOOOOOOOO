@@ -125,7 +125,32 @@ public class Lista {
 
     }
 
-    public void selecaoDiretaa() {
+    public void selecaoDireta()
+    {
+        No i = inicio, PosMenor;
+        int menor, aux;
+        while (i != null)
+        {
+            PosMenor = i;
+            menor = i.getNum();
+            No j = i.getProx();
+
+            while (j != null)
+            {
+                if(j.getNum() < menor)
+                {
+                    menor = j.getNum();
+                    PosMenor = j;
+                }
+                j = j.getProx();
+            }
+
+            aux = i.getNum();
+            i.setNum(PosMenor.getNum());
+            PosMenor.setNum(aux);
+
+            i = i.getProx();
+        }
 
     }
 
