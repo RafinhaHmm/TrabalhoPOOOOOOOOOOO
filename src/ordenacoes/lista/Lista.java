@@ -90,13 +90,20 @@ public class Lista {
         return i;
     }
 
-    public No NoIndice(int indice)
+    public No AndaNo(No aux, int qtd)
     {
-        No aux = inicio;
-        while (aux != null && indice > 0)
+        while (aux != null && qtd != 0)
         {
-            aux = aux.getProx();
-            indice--;
+            if (qtd > 0)
+            {
+                aux = aux.getProx();
+                qtd--;
+            }
+            else
+            {
+                aux = aux.getAnt();
+                qtd++;
+            }
         }
         return aux;
     }
@@ -173,30 +180,27 @@ public class Lista {
     {
         int dist = 1;
         int tl = Total();
-        int i,pos;
-        No aux1, aux2;
         int auxNum;
+        No aux_I, aux_Pos, aux_dist;
         while(dist < tl)
             dist = 3 * dist + 1;
         dist = dist/3;
-        while(dist > 0)
+        while (dist > 0)
         {
-            i = dist;
-            pos = i;
-            while(i < tl)
+            aux_I = AndaNo(inicio,dist);
+            while(aux_I != null)
             {
-                aux1 = NoIndice(i);
-                auxNum = aux1.getNum();
-                aux2 = NoIndice(pos-dist);
-                while(pos > 0 && aux2 != null && auxNum < aux2.getNum())
+                auxNum = aux_I.getNum();
+                aux_Pos = aux_I;
+                aux_dist = AndaNo(aux_I,-dist);
+                while(aux_dist != null && auxNum < aux_dist.getNum())
                 {
-                    aux1.setNum(aux2.getNum());
-                    aux1 = aux2;
-                    pos = pos-dist;
-                    aux2 = NoIndice(pos);
+                    aux_Pos.setNum(aux_dist.getNum());
+                    aux_Pos = aux_dist;
+                    aux_dist = AndaNo(aux_dist,-dist);
                 }
-                aux1.setNum(auxNum);
-                i++;
+                aux_Pos.setNum(auxNum);
+                aux_I = aux_I.getProx();
             }
             dist = dist/3;
         }
