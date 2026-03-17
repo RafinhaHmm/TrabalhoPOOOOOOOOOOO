@@ -228,7 +228,6 @@ public class Lista {
             while(pai != null)
             {
                 filho1 = AndaNo(pai,SubTree);
-                filho2 = null;
                 if (filho1 != null)
                 {
                     maiorFilho = filho1;
