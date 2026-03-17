@@ -90,6 +90,12 @@ public class Lista {
         return i;
     }
 
+    /** Método para andar uma quantidade de nodulos na lista começando de "aux"
+     *<pre>
+    *Se qtd > 0 retornará o nodulo a qtd de distancia depois de "aux"
+    *Se qtd < 0 retornará o nodulo a qtd de distancia antes de "aux"
+     *</pre>
+     */
     public No AndaNo(No aux, int qtd)
     {
         while (aux != null && qtd != 0)
@@ -206,11 +212,109 @@ public class Lista {
         }
     }
 
-    public void HeapSort(){}
+    public void HeapSort()
+    {
+        int tlAux = Total();
+        int SubTree;
+        No pai;
+        No filho1;
+        No filho2;
+        No maiorFilho;
+        int valorAux;
+        while(tlAux > 1)
+        {
+            pai = AndaNo(inicio,tlAux / 2 - 1);
+            SubTree = tlAux / 2 - 1;
+            while(pai != null)
+            {
+                filho1 = AndaNo(pai,SubTree);
+                filho2 = null;
+                if (filho1 != null)
+                {
+                    maiorFilho = filho1;
+                    filho2 = filho1.getProx();
+                    if (filho2 != null && filho1.getNum() < filho2.getNum())
+                        maiorFilho = filho2;
+                    if (pai.getNum() < maiorFilho.getNum()) {
+                        valorAux = pai.getNum();
+                        pai.setNum(maiorFilho.getNum());
+                        maiorFilho.setNum(valorAux);
+                    }
+                }
+                SubTree--;
+                pai = pai.getAnt();
+            }
+            tlAux--;
+            pai = AndaNo(inicio,tlAux);
+            valorAux = inicio.getNum();
+            inicio.setNum(pai.getNum());
+            pai.setNum(valorAux);
+        }
+    }
 
-    public void QuickSemPivo(){}
+    public void QuickSemPivo()
+    {
+        QuickSemPivo(inicio,fim);
+    }
 
-    public void QuickComPivo(){}
+    private void QuickSemPivo(No inicio, No fim)
+    {
+        int auxNum;
+        No i = inicio, j = fim;
+        boolean flag = true;
+        if (i != null)
+        {
+            while (i != j) {
+                if (i.getNum() > j.getNum())
+                {
+                    auxNum = i.getNum();
+                    i.setNum(j.getNum());
+                    j.setNum(auxNum);
+                    flag = !flag;
+                }
+                if (flag)
+                    i = i.getProx();
+                else
+                    j = j.getAnt();
+            }
+            if(inicio != i && inicio != i.getAnt())
+                QuickSemPivo(inicio,i.getAnt());
+            if (fim != j && fim != j.getProx())
+                QuickSemPivo(j.getProx(),fim);
+        }
+    }
+
+    private void QuickComPivo(No inicio, No fim)
+    {
+        No i = inicio;
+        No j = fim;
+        int pivo = fim.getNum();
+        int aux;
+        while(i != j && i.getAnt() != j)
+        {
+            while(i.getNum() < pivo)
+                i = i.getProx();
+            while(j.getNum() > pivo)
+                j = j.getAnt();
+            if(i.getAnt() != j)
+            {
+                aux = i.getNum();
+                i.setNum(j.getNum());
+                j.setNum(aux);
+                i = i.getProx();
+                j = j.getAnt();
+            }
+        }
+        if(inicio != j)
+            QuickComPivo(inicio,j);
+        if(fim != i)
+            QuickComPivo(i,fim);
+    }
+
+    public void QuickComPivo()
+    {
+        QuickComPivo(inicio,fim);
+    }
 
     public void FusaoDiretaImp1(){}
 

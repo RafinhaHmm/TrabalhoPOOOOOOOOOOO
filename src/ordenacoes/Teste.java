@@ -13,10 +13,16 @@ public class Teste {
     {
         Lista lista = new Lista();
         lista.inicializa();
-        lista.Randomico();
+        lista.Inversa();
         lista.exibe("Lista randomica");
-        lista.ShellSort();
-        lista.exibe("ShellSort");
+        //lista.ShellSort();
+        //lista.exibe("ShellSort");
+//        lista.HeapSort();
+//        lista.exibe("HeapSort");
+//        lista.QuickSemPivo();
+//        lista.exibe("Quick sem pivo");
+        lista.QuickComPivo();
+        lista.exibe("Quick com pivo");
     }
 
 }
