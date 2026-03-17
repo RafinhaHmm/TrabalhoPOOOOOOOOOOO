@@ -90,7 +90,7 @@ public class Lista {
         return i;
     }
 
-    /** Método para andar uma quantidade de nodulos na lista começando de "aux"
+    /** Metodo para andar uma quantidade de nodulos na lista começando de "aux"
      *<pre>
     *Se qtd > 0 retornará o nodulo a qtd de distancia depois de "aux"
     *Se qtd < 0 retornará o nodulo a qtd de distancia antes de "aux"
