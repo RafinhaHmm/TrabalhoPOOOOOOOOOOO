@@ -101,6 +101,34 @@ public class Lista {
         return aux;
     }
 
+    public No getNo(int pos)
+    {
+        No aux = inicio;
+        int i = 0;
+
+        while (aux != null && i < pos)
+        {
+            aux = aux.getProx();
+            i++;
+        }
+
+        return aux;
+    }
+
+    public int tl()
+    {
+        int cont = 0;
+        No aux = inicio;
+
+        while (aux != null)
+        {
+            cont++;
+            aux = aux.getProx();
+        }
+
+        return cont;
+    }
+
     ///ordenações Mendes
     public void insercao_direta()
     {
@@ -156,7 +184,26 @@ public class Lista {
 
     public void Bolha()
     {
-
+        boolean flag = true;
+        No i = fim, j;
+        int aux;
+        while (i != inicio && flag)
+        {
+            flag = false;
+            j = inicio;
+            while (j != i)
+            {
+                if(j.getNum() > j.getProx().getNum())
+                {
+                    aux = j.getNum();
+                    j.setNum(j.getProx().getNum());
+                    j.getProx().setNum(aux);
+                    flag = true;
+                }
+                j = j.getProx();
+            }
+            i = i.getAnt();
+        }
     }
 
     public void Shake()
@@ -164,9 +211,63 @@ public class Lista {
 
     }
 
-    public void Comb(){}
-    public void Gnome(){}
-    public void Tim(){}
+    public void troca(No a, No b)
+    {
+        int aux = a.getNum();
+        a.setNum(b.getNum());
+        b.setNum(aux);
+    }
+
+    public void Comb() //Algoritmo do livro: C++ PROGRAMMING FROM BASICS de Alytis Gruodis Sergejus Ivanikovas | https://books.vvk.lt/p12/Gruodis_Ivanikovas_C%2B%2Bprogramming_2012.pdf
+    {
+        double dG = 1.247330950103979;
+        int iGap = tl();
+        boolean bDone = false;
+        No no1, no2;
+
+        do
+        {
+            iGap = (int) ((double) iGap / dG);
+
+            if (iGap < 1)
+                iGap = 1;
+
+            bDone = false;
+
+            for (int i = 0; (i + iGap) < tl(); i++)
+            {
+                no1 = getNo(i);
+                no2 = getNo(i + iGap);
+
+                if (no1.getNum() > no2.getNum())
+                {
+                    troca(no1, no2);
+                    bDone = true;
+                }
+            }
+        }
+        while (!((iGap == 1) && (!bDone)));
+    }
+
+    public void Gnome() //Algoritmo do livro: Python Algorithms Mastering Basic Algorithms in the Python Language de Magnus Lie Hetland
+    {
+        No i = inicio;
+
+        while (i != null)
+        {
+            if (i == inicio || i.getAnt().getNum() <= i.getNum())
+                i = i.getProx();
+            else
+            {
+                int aux = i.getNum();
+                i.setNum(i.getAnt().getNum());
+                i.getAnt().setNum(aux);
+                i = i.getAnt();
+            }
+        }
+    }
+
+    public void Tim(){} // puta q pariu
 
     /// Ordenacoes Fiori
     public void ShellSort()
