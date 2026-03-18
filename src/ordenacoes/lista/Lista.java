@@ -37,7 +37,7 @@ public class Lista {
     {
         this.inicializa();
 
-        for (int i = 1; i < 31; i++)
+        for (int i = 1; i < 33; i++)
         {
             this.insereInicio(i);
         }
@@ -47,7 +47,7 @@ public class Lista {
     {
         this.inicializa();
 
-        for (int i = 30; i > 0; i--)
+        for (int i = 32; i > 0; i--)
         {
             this.insereInicio(i);
         }
@@ -58,7 +58,7 @@ public class Lista {
         Random rand = new Random();
         this.inicializa();
 
-        for (int i = 1; i < 31; i++)
+        for (int i = 1; i < 33; i++)
         {
             int num = rand.nextInt(99);
             this.insereInicio(num);
@@ -416,7 +416,79 @@ public class Lista {
         QuickComPivo(inicio,fim);
     }
 
-    public void FusaoDiretaImp1(){}
+    public void FusaoDiretaImp1()
+    {
+        Lista l1 = new Lista();
+        Lista l2 = new Lista();
+        int seq = 1;
+        while(seq < Total())
+        {
+            particaoImp1(l1,l2);
+            this.exibe("lista");
+            fusaoImp1(l1,l2,seq);
+            l1.exibe("lista1");
+            l2.exibe("lista2");
+            seq = seq * 2;
+        }
+    }
+
+    private void particaoImp1(Lista l1, Lista l2)
+    {
+        int meio = Total()/2;
+        l1.inicializa();
+        l2.inicializa();
+        No aux = fim;
+        for (int i = 0; i < meio; i++) {
+            l2.insereInicio(aux.getNum());
+            aux = aux.getAnt();
+        }
+        for (int i = 0; i < meio; i++) {
+            l1.insereInicio(aux.getNum());
+            aux = aux.getAnt();
+        }
+    }
+
+    private void fusaoImp1(Lista l1, Lista l2, int seq)
+    {
+        No i = l1.inicio;
+        No j = l2.inicio;
+        No k = this.inicio;
+        while (k != null)
+        {
+            int conti = 0;
+            int contj = 0;
+            while(i != null && j != null && conti < seq && contj < seq)
+            {
+                if (i.getNum() < j.getNum())
+                {
+                    k.setNum(i.getNum());
+                    conti++;
+                    i = i.getProx();
+                }
+                else
+                {
+                    k.setNum(j.getNum());
+                    contj++;
+                    j = j.getProx();
+                }
+                k = k.getProx();
+            }
+            while(i != null && conti < seq)
+            {
+                k.setNum(i.getNum());
+                i = i.getProx();
+                k = k.getProx();
+                conti++;
+            }
+            while(j != null && contj < seq)
+            {
+                k.setNum(j.getNum());
+                j = j.getProx();
+                k = k.getProx();
+                contj++;
+            }
+        }
+    }
 
     public void FusaoDiretaImp2(){}
 
