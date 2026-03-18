@@ -492,7 +492,10 @@ public class Lista {
 
     public void FusaoDiretaImp2(){}
 
-    public void Counting(){}
+    public void Counting()
+    {
+
+    }
 
     public void Bucket(){}
 
