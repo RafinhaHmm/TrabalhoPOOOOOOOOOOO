@@ -162,7 +162,88 @@ public class Lista {
         return cont;
     }
 
+    private int distancia(No ini, No fim)
+    {
+        int cont = 0;
+        No aux = ini;
+
+        while (aux != null && aux != fim)
+        {
+            aux = aux.getProx();
+            cont++;
+        }
+
+        return cont;
+    }
+
+    private No buscaBinaria(No ini, No fim, int valor)
+    {
+        No esquerda = ini;
+        No direita = fim.getAnt();
+
+        while (esquerda != null && direita != null && esquerda != direita.getProx())
+        {
+            int dist = distancia(esquerda, direita);
+            No meio = AndaNo(esquerda, dist / 2);
+
+            if (valor < meio.getNum())
+                direita = meio.getAnt();
+            else
+                esquerda = meio.getProx();
+        }
+
+        return esquerda;
+    }
+
+    public No BBFiori(int valor)
+    {
+        No aux;
+        int meio = Total()/2;
+        aux = AndaNo(inicio,meio);
+        while (meio > 0 && aux.getNum() != valor)
+        {
+            meio = meio/2;
+            if (aux.getNum() < valor)
+            {
+                aux = aux.getAnt();
+                aux = AndaNo(aux,-meio);
+            }
+            else
+            {
+                aux = aux.getProx();
+                aux = AndaNo(aux,meio);
+            }
+        }
+        return  aux;
+    }
+
+    public No irParaPos(int pos) //metodo burro
+    {
+        No i = inicio;
+        while (pos > 0 && i != null)
+        {
+            i = i.getProx();
+            pos--;
+        }
+        return i;
+    }
+
+    private int posicao(No no)
+    {
+        int pos = 0;
+        No aux = inicio;
+
+        while (aux != null && aux != no)
+        {
+            aux = aux.getProx();
+            pos++;
+        }
+
+        return pos;
+    }
+
     ///ordenações Mendes
+    ///
     public void insercao_direta()
     {
         No pi = inicio.getProx(), ppos;
@@ -183,7 +264,24 @@ public class Lista {
 
     public void InsercaoBinaria()
     {
+        No pi = inicio;
 
+        while (pi != null)
+        {
+            int valor = pi.getNum();
+            No pos = buscaBinaria(inicio, pi, valor);
+
+            No p = pi;
+
+            while (p != pos)
+            {
+                p.setNum(p.getAnt().getNum());
+                p = p.getAnt();
+            }
+
+            pos.setNum(valor);
+            pi = pi.getProx();
+        }
     }
 
     public void selecaoDireta()
@@ -239,9 +337,48 @@ public class Lista {
         }
     }
 
+
     public void Shake()
     {
+        No ini = inicio, Fim = fim;
+        boolean flag = true;
+        int aux;
 
+        while (ini != Fim && flag)
+        {
+            flag = false;
+            No i = ini;
+            while (i != fim)
+            {
+                if(i.getNum() > i.getProx().getNum())
+                {
+                    aux = i.getNum();
+                    i.setNum(i.getProx().getNum());
+                    i.getProx().setNum(aux);
+                    flag = true;
+                }
+                i = i.getProx();
+            }
+            Fim = Fim.getAnt();
+
+            if(flag)
+            {
+                flag = false;
+                i = Fim;
+                while (i != ini)
+                {
+                    if(i.getNum() < i.getAnt().getNum())
+                    {
+                        aux = i.getNum();
+                        i.setNum(i.getAnt().getNum());
+                        i.getAnt().setNum(aux);
+                        flag = true;
+                    }
+                    i = i.getAnt();
+                }
+                ini = ini.getProx();
+            }
+        }
     }
 
     public void troca(No a, No b)
@@ -300,7 +437,72 @@ public class Lista {
         }
     }
 
-    public void Tim(){} // puta q pariu
+    public void insercao_diretaAux(No ini, No fim)
+    {
+        No pi = ini.getProx(), ppos;
+        No TL = fim.getProx();
+        int aux;
+        while(pi != TL)
+        {
+            aux = pi.getNum();
+            ppos = pi;
+            while(ppos != ini && aux < ppos.getAnt().getNum())
+            {
+                ppos.setNum(ppos.getAnt().getNum());
+                ppos = ppos.getAnt();
+            }
+            ppos.setNum(aux);
+            pi=pi.getProx();
+        }
+    }
+
+    public void Tim() //Hands-On Data Structures and Algorithms with Python | Basant Agarwal
+    {
+        int run = 32;
+        int tamanho = tl();
+
+        for (int inicioRun = 0; inicioRun < tamanho; inicioRun += run)
+        {
+            No ini = AndaNo(inicio, inicioRun);
+            int tamTrecho = run;
+
+            if (inicioRun + tamTrecho > tamanho)
+                tamTrecho = tamanho - inicioRun;
+
+            No fim = AndaNo(ini, tamTrecho - 1);
+
+            insercao_diretaAux(ini, fim);
+        }
+
+        int runSize = run;
+
+        while (runSize < tamanho)
+        {
+            for (int esquerda = 0; esquerda < tamanho; esquerda += 2 * runSize)
+            {
+                int tam1 = runSize;
+                int tam2 = runSize;
+
+                if (esquerda + tam1 > tamanho)
+                    tam1 = tamanho - esquerda;
+
+                if (esquerda + tam1 + tam2 > tamanho)
+                    tam2 = tamanho - (esquerda + tam1);
+
+                if (tam1 > 0 && tam2 > 0)
+                {
+                    No ini1 = AndaNo(inicio, esquerda);
+                    No fim1 = AndaNo(ini1, tam1 - 1);
+                    No ini2 = fim1.getProx();
+                    No fim2 = AndaNo(ini2, tam2 - 1);
+
+                //    mergeTrechos(ini1, fim1, ini2, fim2);
+                }
+            }
+
+            runSize = runSize * 2;
+        }
+    }
 
     /// Ordenacoes Fiori
     public void ShellSort()
