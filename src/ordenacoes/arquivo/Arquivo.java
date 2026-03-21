@@ -2,11 +2,13 @@ package ordenacoes.arquivo;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Random;
 
 public class Arquivo
 {
     private String nomearquivo;
     private RandomAccessFile arquivo;
+    private int comp, mov;
 
     public Arquivo(String nomearquivo)
     {
@@ -82,15 +84,12 @@ public class Arquivo
 
     public void leArq()
     {
-        int codigo, idade;
-        String nome;
-        codigo = Entrada.leInteger("Digite o c digo");
-        while (codigo != 0)
+        int numero;
+        numero = Entrada.leInteger("Digite o numero");
+        while (numero != 0)
         {
-            nome = Entrada.leString("Digite o nome");
-            idade = Entrada.leInteger("Digite a idade");
-            inserirRegNoFinal(new Registro(codigo, nome, idade));
-            codigo = Entrada.leInteger("Digite o c digo");
+            inserirRegNoFinal(new Registro(numero));
+            numero = Entrada.leInteger("Digite o numero");
         }
     }
 
@@ -122,7 +121,7 @@ public class Arquivo
                     seekArq(pos - dist);
                     posReg.leDoArq(arquivo);
                 }
-                while(pos > 0 && auxReg.getNome().compareToIgnoreCase(posReg.getNome()) < 0)
+                //while(pos > 0 && auxReg.getNumero().compareToIgnoreCase(posReg.getNumero()) < 0)
                 {
                     seekArq(pos);
                     posReg.gravaNoArq(arquivo);
@@ -163,5 +162,46 @@ public class Arquivo
             throw new RuntimeException(e);
         }
     }
+
+    public void geraArqOrdenado()
+    {
+        this.truncate(0);
+        for (int i = 0; i < 1024; i++)
+        {
+            Registro registro = new Registro(i);
+            inserirRegNoFinal(registro);
+        }
+    }
+    public void geraArqInverso()
+    {
+        this.truncate(0);
+        for (int i = 1023; i > 0; i--)
+        {
+            Registro registro = new Registro(i);
+            inserirRegNoFinal(registro);
+        }
+    }
+
+    public void geraArqRandom()
+    {
+        this.truncate(0);
+        Random random = new Random();
+        for (int i = 0; i < 1024; i++)
+        {
+            int rand = random.nextInt(9999);
+            Registro registro = new Registro(rand);
+            inserirRegNoFinal(registro);
+        }
+    }
+
+    //ordenação mendes:
+
+    public void insercaoDireta()
+    {
+
+    }
+
+
+
 }
 
