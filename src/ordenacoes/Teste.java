@@ -13,8 +13,16 @@ public class Teste {
     {
         Lista lista = new Lista();
         lista.inicializa();
-        lista.Inversa();
-        //lista.exibe("Lista inversa");
+        boolean flag = true;
+        if (flag) {
+            lista.Inversa();
+            lista.exibe("Lista inversa");
+        }
+        else
+        {
+            lista.Randomico();
+            lista.exibe("Lista randomica");
+        }
         //lista.ShellSort();
         //lista.exibe("ShellSort");
 //        lista.HeapSort();
@@ -23,8 +31,12 @@ public class Teste {
 //        lista.exibe("Quick sem pivo");
 //        lista.QuickComPivo();
 //        lista.exibe("Quick com pivo");
-        lista.FusaoDiretaImp1();
-        lista.exibe("Fusao Direta Imp1");
+//        lista.FusaoDiretaImp1();
+//        lista.exibe("Fusao Direta Imp1");
+//        lista.Counting();
+//        lista.exibe("Counting Sort");
+        lista.Bucket();
+        lista.exibe("Bucket Sort");
     }
 
 }

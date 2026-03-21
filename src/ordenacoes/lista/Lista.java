@@ -60,7 +60,7 @@ public class Lista {
 
         for (int i = 1; i < 33; i++)
         {
-            int num = rand.nextInt(99);
+            int num = rand.nextInt(32);
             this.insereInicio(num);
         }
     }
@@ -88,6 +88,19 @@ public class Lista {
             i++;
         }
         return i;
+    }
+
+    private int Maior()
+    {
+        No aux = inicio;
+        int maior = 0;
+        while (aux != null)
+        {
+            if (aux.getNum() > maior)
+                maior = aux.getNum();
+            aux = aux.getProx();
+        }
+        return maior;
     }
 
     /** Metodo para andar uma quantidade de nodulos na lista começando de "aux"
@@ -490,14 +503,83 @@ public class Lista {
         }
     }
 
-    public void FusaoDiretaImp2(){}
-
-    public void Counting()
+    public void FusaoDiretaImp2()
     {
 
     }
 
-    public void Bucket(){}
+    public void Counting()
+    {
+        No aux = inicio;
+        int tl = Maior();
+        int[] contV = new int[tl+1];
+        while (aux != null)
+        {
+            contV[aux.getNum()]++;
+            aux = aux.getProx();
+        }
+        for (int i = 1; i < tl+1; i++)
+            contV[i] += contV[i - 1];
+        tl = Total();
+        Lista respList = new Lista();
+        for (int i = 0; i < tl; i++)
+            respList.insereInicio(0);
+        aux = fim;
+        No auxResp = respList.inicio;
+        System.out.println(contV[aux.getNum()]);
+        contV[aux.getNum()]--;
+        auxResp = AndaNo(auxResp,contV[aux.getNum()]);
+        auxResp.setNum(aux.getNum());
+        aux = aux.getAnt();
+        while (aux != null)
+        {
+            contV[aux.getNum()]--;
+            auxResp = AndaNo(auxResp,contV[aux.getNum()] - contV[aux.getProx().getNum()]);
+            auxResp.setNum(aux.getNum());
+            System.out.println(auxResp.getNum());
+            aux = aux.getAnt();
+        }
+        respList.exibe("FDS");
+        this.inicio = respList.inicio;
+        this.fim = respList.fim;
+    }
+
+    public void Bucket()
+    {
+        int n = 10;
+        Lista[] hash = new Lista[n];
+        No aux = inicio;
+        int maior = Maior();
+        while (aux != null)
+        {
+            int posHash = aux.getNum() * n / (maior+1);
+            if (hash[posHash] == null) {
+                hash[posHash] = new Lista();
+                hash[posHash].inicializa();
+            }
+            hash[posHash].insereInicio(aux.getNum());
+            aux = aux.getProx();
+        }
+        for (int i = 0; i < n; i++) {
+            if (hash[i].inicio != null)
+                hash[i].QuickSemPivo();
+        }
+        aux = inicio;
+        int i = 0;
+        while (aux != null)
+        {
+            if (hash[i] != null) {
+                No auxBucket = hash[i++].inicio;
+                while (auxBucket != null) {
+                    aux.setNum(auxBucket.getNum());
+                    aux = aux.getProx();
+                    auxBucket = auxBucket.getProx();
+                }
+            }
+            else
+                i++;
+        }
+    }
 
     public void Radix(){}
 }
