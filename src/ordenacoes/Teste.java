@@ -35,8 +35,12 @@ public class Teste {
 //        lista.exibe("Fusao Direta Imp1");
 //        lista.Counting();
 //        lista.exibe("Counting Sort");
-        lista.Bucket();
-        lista.exibe("Bucket Sort");
+//        lista.Bucket();
+//        lista.exibe("Bucket Sort");
+//        lista.Counting();
+//        lista.exibe("Radix");
+        lista.FusaoDiretaImp2();
+        lista.exibe("Fusão direta imp2");
     }
 
 }

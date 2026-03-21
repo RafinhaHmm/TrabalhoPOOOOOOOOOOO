@@ -17,6 +17,13 @@ public class Lista {
         no.setAnt(null);
         return no;
     }
+
+    private void GeraListaAux(Lista aux, int tl)
+    {
+        for (int i = 0; i < tl; i++)
+            aux.insereInicio(0);
+    }
+
     public void insereInicio(int num)
     {
         No no = criaNo(num);
@@ -505,7 +512,53 @@ public class Lista {
 
     public void FusaoDiretaImp2()
     {
+        int tl = Total();
+        int[] vet = new int[tl];
+        fusaoImp2(inicio,fim,tl/2,vet);
+    }
 
+    private void fusaoImp2(No esq, No dir, int qtd, int[] aux)
+    {
+        if (esq != dir)
+        {
+            No meio = AndaNo(esq,qtd);
+            fusaoImp2(esq,meio,qtd/2, aux);
+            if (meio != null) {
+                fusaoImp2(meio.getProx(), dir, qtd / 2, aux);
+                merge(esq, meio.getProx(), meio.getProx(), dir.getProx(), aux);
+            }
+        }
+    }
+
+    private void merge(No ini1, No fim1, No ini2, No fim2, int[] aux) {
+        No i = ini1;
+        No j = ini2;
+        int k = 0;
+        while(i != fim1 && j != null && j != fim2)
+        {
+            if (i.getNum() < j.getNum()){
+                aux[k++] = i.getNum();
+                i = i.getProx();
+            }
+            else
+            {
+                aux[k++] = j.getNum();
+                j = j.getProx();
+            }
+        }
+        while (i != fim1){
+            aux[k++] = i.getNum();
+            i = i.getProx();
+        }
+        while (j != null &&j != fim2){
+            aux[k++] = j.getNum();
+            j = j.getProx();
+        }
+        No auxLista = ini1;
+        for (int l = 0; l < k; l++) {
+            auxLista.setNum(aux[l]);
+            auxLista = auxLista.getProx();
+        }
     }
 
     public void Counting()
@@ -520,13 +573,10 @@ public class Lista {
         }
         for (int i = 1; i < tl+1; i++)
             contV[i] += contV[i - 1];
-        tl = Total();
         Lista respList = new Lista();
-        for (int i = 0; i < tl; i++)
-            respList.insereInicio(0);
+        GeraListaAux(respList,Total());
         aux = fim;
         No auxResp = respList.inicio;
-        System.out.println(contV[aux.getNum()]);
         contV[aux.getNum()]--;
         auxResp = AndaNo(auxResp,contV[aux.getNum()]);
         auxResp.setNum(aux.getNum());
@@ -536,10 +586,8 @@ public class Lista {
             contV[aux.getNum()]--;
             auxResp = AndaNo(auxResp,contV[aux.getNum()] - contV[aux.getProx().getNum()]);
             auxResp.setNum(aux.getNum());
-            System.out.println(auxResp.getNum());
             aux = aux.getAnt();
         }
-        respList.exibe("FDS");
         this.inicio = respList.inicio;
         this.fim = respList.fim;
     }
@@ -581,5 +629,50 @@ public class Lista {
         }
     }
 
-    public void Radix(){}
+    public void Radix()
+    {
+        Lista resp = new Lista();
+        resp.inicializa();
+        GeraListaAux(resp,Total());
+        int m = Maior();
+        for (int exp = 1; m/ exp > 0; exp *= 10)
+            CountRadix(exp,resp);
+    }
+
+    private void CountRadix(int exp, Lista resp)
+    {
+        No aux = inicio;
+        int tl = 9;
+        int[] contV = new int[tl+1];
+        while (aux != null)
+        {
+            contV[(aux.getNum() / exp) % 10]++;
+            aux = aux.getProx();
+        }
+        for (int i = 1; i < tl+1; i++)
+            contV[i] += contV[i - 1];
+        aux = fim;
+        No auxResp = resp.inicio;
+        int pos = (aux.getNum() / exp) % 10;
+        contV[pos]--;
+        auxResp = AndaNo(auxResp,contV[pos]);
+        auxResp.setNum(aux.getNum());
+        aux = aux.getAnt();
+        while (aux != null)
+        {
+            int ant = pos;
+            pos = (aux.getNum() / exp) % 10;
+            contV[pos]--;
+            auxResp = AndaNo(auxResp,contV[pos] - contV[ant]);
+            auxResp.setNum(aux.getNum());
+            aux = aux.getAnt();
+        }
+        aux = inicio;
+        auxResp = resp.inicio;
+        while (aux != null){
+            aux.setNum(auxResp.getNum());
+            aux = aux.getProx();
+            auxResp = auxResp.getProx();
+        }
+    }
 }
