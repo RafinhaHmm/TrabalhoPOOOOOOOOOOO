@@ -28,6 +28,50 @@ public class Arquivo
         { }
     }
 
+    public RandomAccessFile getFile()
+    {
+        return this.arquivo;
+    }
+
+    public void copiaArquivo(RandomAccessFile origem)
+    {
+        Registro reg = new Registro();
+
+        try
+        {
+            origem.seek(0);
+            this.truncate(0);
+
+            while (origem.getFilePointer() < origem.length())
+            {
+                reg.leDoArq(origem);
+                reg.gravaNoArq(this.arquivo);
+            }
+        }
+        catch (IOException e)
+        {
+        }
+    }
+
+    public int getComp()
+    {
+        return this.comp;
+    }
+    public int getMov()
+    {
+        return this.mov;
+    }
+
+    public void initComp()
+    {
+        comp = 0;
+    }
+
+    public void initMov()
+    {
+        mov = 0;
+    }
+
     //semelhante ao feof() da linguagem C
     //verifica se o ponteiro esta no <EOF> do arquivo
     public boolean eof()
@@ -166,7 +210,7 @@ public class Arquivo
     public void geraArqOrdenado()
     {
         this.truncate(0);
-        for (int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++) //1024
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -175,7 +219,7 @@ public class Arquivo
     public void geraArqInverso()
     {
         this.truncate(0);
-        for (int i = 1023; i > 0; i--)
+        for (int i = 1023; i > 0; i--) //1023
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -186,7 +230,7 @@ public class Arquivo
     {
         this.truncate(0);
         Random random = new Random();
-        for (int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++) //1024
         {
             int rand = random.nextInt(9999);
             Registro registro = new Registro(rand);
@@ -198,10 +242,177 @@ public class Arquivo
 
     public void insercaoDireta()
     {
+        int pos;
+        boolean flag;
+        Registro auxReg = new Registro();
+        Registro auxReg2 = new Registro();
 
+        for (int i = 1; i < this.filesize(); i++)
+        {
+            this.comp++;
+
+            this.seekArq(i);
+            auxReg.leDoArq(this.arquivo);
+            pos = i;
+            flag = true;
+
+            while (pos > 0 && flag)
+            {
+                this.comp++;
+
+                this.seekArq(pos - 1);
+                auxReg2.leDoArq(this.arquivo);
+
+                if (auxReg.getNumero() < auxReg2.getNumero())
+                {
+                    this.comp++;
+
+                    this.seekArq(pos);
+                    auxReg2.gravaNoArq(this.arquivo);
+                    pos--;
+                }
+                else
+                    flag = false;
+            }
+
+            this.seekArq(pos);
+            auxReg.gravaNoArq(this.arquivo);
+        }
     }
 
 
+    // Inserção Binária
+    public void insercaoBinaria()
+    {
 
+    }
+
+    // Seleção Direta
+    public void selecaoDireta()
+    {
+        Registro regmenor = new Registro();
+        Registro regi = new Registro();
+        Registro regj = new Registro();
+        int posmenor, TL = filesize(), menor;
+
+        for (int i = 0; i < TL - 1; i++)
+        {
+            seekArq(i);
+            regi.leDoArq(arquivo);
+            menor = regi.getNumero();
+            posmenor = i;
+
+            for (int j = i + 1; j < TL; j++)
+            {
+                seekArq(j);
+                regj.leDoArq(arquivo);
+
+                if (regj.getNumero() < menor)
+                {
+                    menor = regj.getNumero();
+                    posmenor = j;
+                }
+            }
+
+            seekArq(posmenor);
+            regmenor.leDoArq(arquivo);
+
+            seekArq(i);
+            regmenor.gravaNoArq(arquivo);
+
+            seekArq(posmenor);
+            regi.gravaNoArq(arquivo);
+
+        }
+    }
+
+    // Bolha
+    public void bolha()
+    {
+        int TL = this.filesize();
+        int TL2 = TL;
+        boolean flag = true;
+        Registro regAux = new Registro();
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+
+        while (TL2 > 1 && flag)
+        {
+            flag = false;
+            for (int i = 0; i < TL2-1; i++)
+            {
+                this.seekArq(i);
+                if()
+            }
+        }
+    }
+
+    // Shake
+    public void shake()
+    {
+    }
+
+    // Comb
+    public void comb()
+    {
+    }
+
+    // Gnome
+    public void gnome()
+    {
+    }
+
+    // Tim
+    public void tim()
+    {
+    }
+
+
+// ========================= FIORI =========================
+
+    // Shell
+    public void shell()
+    {
+    }
+
+    // Heap
+    public void heap()
+    {
+    }
+
+    // Quick sem pivô
+    public void quickSemPivo()
+    {
+    }
+
+    // Quick com pivô
+    public void quickComPivo()
+    {
+    }
+
+    // Fusão Direta (Merge) - 1ª implementação
+    public void merge1()
+    {
+    }
+
+    // Fusão Direta (Merge) - 2ª implementação
+    public void merge2()
+    {
+    }
+
+    // Counting
+    public void counting()
+    {
+    }
+
+    // Bucket
+    public void bucket()
+    {
+    }
+
+    // Radix
+    public void radix()
+    {
+    }
 }
 
