@@ -342,17 +342,19 @@ public class Arquivo
                 pos = i;
                 seekArq(i);
                 auxReg.leDoArq(arquivo);
-                if (pos-dist > 0)
+                if (pos-dist >= 0) {
                     seekArq(pos - dist);
-                posReg.leDoArq(arquivo);
-                while(pos > 0 && auxReg.getNumero() < posReg.getNumero())
+                    posReg.leDoArq(arquivo);
+                }
+                while(pos-dist >= 0 && auxReg.getNumero() < posReg.getNumero())
                 {
                     seekArq(pos);
                     posReg.gravaNoArq(arquivo);
                     pos = pos-dist;
-                    if (pos-dist > 0)
+                    if (pos-dist >= 0) {
                         seekArq(pos - dist);
-                    posReg.leDoArq(arquivo);
+                        posReg.leDoArq(arquivo);
+                    }
                 }
                 seekArq(pos);
                 auxReg.gravaNoArq(arquivo);

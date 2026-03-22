@@ -646,10 +646,7 @@ public class Lista {
         while(seq < Total())
         {
             particaoImp1(l1,l2);
-            this.exibe("lista");
             fusaoImp1(l1,l2,seq);
-            l1.exibe("lista1");
-            l2.exibe("lista2");
             seq = seq * 2;
         }
     }
