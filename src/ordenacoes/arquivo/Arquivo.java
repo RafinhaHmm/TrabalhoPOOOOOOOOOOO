@@ -279,16 +279,52 @@ public class Arquivo
         }
     }
 
+    private int buscaBi(int fim, int valor)
+    {
+        int esquerda = 0;
+        int direita = fim-1;
+        int meio;
+        Registro regAux = new Registro();
 
+        while (esquerda <= direita)
+        {
+            meio = (esquerda+direita)/2;
+
+            this.seekArq(meio);
+            regAux.leDoArq(this.arquivo);
+            if(valor < regAux.getNumero())
+                direita = meio-1;
+            else
+                esquerda=meio+1;
+        }
+        return esquerda;
+    }
     // Inserção Binária
     public void insercaoBinaria()
     {
-        int valor, pos, j;
+        int valor, pos;
         int TL = this.filesize();
+        Registro regAux = new Registro();
+        Registro reg1 = new Registro();
+
 
         for (int i = 1; i < TL; i++)
         {
+            this.seekArq(i);
+            regAux.leDoArq(this.arquivo);
+            valor = regAux.getNumero();
 
+            pos = buscaBi(i, valor);
+
+            for (int j = i; j > pos ; j--)
+            {
+                this.seekArq(j-1);
+                reg1.leDoArq(this.arquivo);
+                reg1.gravaNoArq(this.arquivo);
+            }
+            Registro regPos = new Registro(valor);
+            this.seekArq(pos);
+            regPos.gravaNoArq(this.arquivo);
         }
     }
 
