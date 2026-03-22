@@ -9,9 +9,9 @@ public class Teste {
     private void Teste()
     {
         Arquivo arq = new Arquivo("arquivo.dat");
-        arq.geraArqInverso();
+        arq.geraArqRandom();
         arq.exibirArq();
-        arq.selecaoDireta();
+        arq.shell();
         System.out.println("\nOrdenada");
         arq.exibirArq();
     }
