@@ -184,7 +184,6 @@ public class Arquivo
         }
     }
 
-
     public void executa()
     {
         leArq();
@@ -284,7 +283,13 @@ public class Arquivo
     // Inserção Binária
     public void insercaoBinaria()
     {
+        int valor, pos, j;
+        int TL = this.filesize();
 
+        for (int i = 1; i < TL; i++)
+        {
+
+        }
     }
 
     // Seleção Direta
@@ -329,42 +334,168 @@ public class Arquivo
     // Bolha
     public void bolha()
     {
-        int TL = this.filesize();
-        int TL2 = TL;
+        int TL2 = this.filesize();
         boolean flag = true;
-        Registro regAux = new Registro();
         Registro reg1 = new Registro();
         Registro reg2 = new Registro();
 
         while (TL2 > 1 && flag)
         {
             flag = false;
-            for (int i = 0; i < TL2-1; i++)
+
+            for (int i = 0; i < TL2 - 1; i++)
             {
                 this.seekArq(i);
-                if()
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i + 1);
+                    reg1.gravaNoArq(this.arquivo);
+
+                    flag = true;
+                }
             }
+            TL2--;
         }
     }
 
     // Shake
     public void shake()
     {
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+        Registro regAux = new Registro();
+
+        int ini=0, fim = this.filesize()-1;
+        boolean flag = true;
+
+        while (ini<fim && flag)
+        {
+            flag = false;
+            for (int i = ini; i < fim; i++)
+            {
+                this.seekArq(i);
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i+1);
+                    regAux.gravaNoArq(this.arquivo);
+
+                    flag = true;
+                }
+            }
+            fim--;
+
+            if(flag)
+            {
+                flag=false;
+
+                for (int i = fim; i > ini ; i--)
+                {
+                    this.seekArq(i-1);
+                    reg1.leDoArq(this.arquivo);
+                    reg2.leDoArq(this.arquivo);
+
+                    if(reg1.getNumero() > reg2.getNumero())
+                    {
+                        this.seekArq(i-1);
+                        reg2.gravaNoArq(this.arquivo);
+                        this.seekArq(i);
+                        reg1.gravaNoArq(this.arquivo);
+
+                        flag=true;
+                    }
+                }
+                ini++;
+            }
+        }
     }
 
     // Comb
     public void comb()
     {
+        double dG = 1.247330950103979;
+        int iGap = this.filesize();
+        boolean bDone;
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+
+        do
+        {
+            iGap = (int)((double)iGap / dG);
+
+            if (iGap < 1)
+                iGap = 1;
+
+            bDone = false;
+
+            for (int i = 0; (i + iGap) < this.filesize(); i++)
+            {
+                this.seekArq(i);
+                reg1.leDoArq(this.arquivo);
+
+                this.seekArq(i + iGap);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+
+                    this.seekArq(i + iGap);
+                    reg1.gravaNoArq(this.arquivo);
+
+                    bDone = true;
+                }
+            }
+        }
+        while (!((iGap == 1) && (!bDone)));
     }
 
     // Gnome
     public void gnome()
     {
+        int i = 0;
+        int tl = this.filesize();
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+
+        while (i < tl)
+        {
+            if (i == 0)
+                i++;
+            else
+            {
+                this.seekArq(i - 1);
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() <= reg2.getNumero())
+                    i++;
+                else
+                {
+                    this.seekArq(i - 1);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i);
+                    reg1.gravaNoArq(this.arquivo);
+                    i--;
+                }
+            }
+        }
     }
 
     // Tim
-    public void tim()
+    public void tim() //pqp senhor cinema
     {
+
     }
 
 

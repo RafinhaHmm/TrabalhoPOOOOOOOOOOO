@@ -708,20 +708,68 @@ public class Principal
     {
     }
 
-    public int calculaCompInsDir(int n) { return 0; }
-    public int calculaMovInsDir(int n) { return 0; }
+    private int n2(int n)
+    {
+        return n * n;
+    }
 
-    public int calculaCompInsBin(int n) { return 0; }
-    public int calculaMovInsBin(int n) { return 0; }
+    private int nLog2N(int n)
+    {
+        if (n <= 1)
+            return 0;
 
-    public int calculaCompSelecao(int n) { return 0; }
-    public int calculaMovSelecao(int n) { return 0; }
+        return (int)Math.round(n * (Math.log(n) / Math.log(2)));
+    }
 
-    public int calculaCompBolha(int n) { return 0; }
-    public int calculaMovBolha(int n) { return 0; }
+    public int calculaCompInsDir(int n)
+    {
+        return n2(n);
+    }
 
-    public int calculaCompShake(int n) { return 0; }
-    public int calculaMovShake(int n) { return 0; }
+    public int calculaMovInsDir(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaCompInsBin(int n)
+    {
+        return nLog2N(n);
+    }
+
+    public int calculaMovInsBin(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaCompSelecao(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaMovSelecao(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaCompBolha(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaMovBolha(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaCompShake(int n)
+    {
+        return n2(n);
+    }
+
+    public int calculaMovShake(int n)
+    {
+        return n2(n);
+    }
 
     public static void main(String args[])
     {
