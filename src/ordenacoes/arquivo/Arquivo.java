@@ -101,7 +101,7 @@ public class Arquivo
         i = 0;
         while (!this.eof())
         {
-//            System.out.println("Posicao " + i);
+            System.out.println("Posicao " + i);
             aux.leDoArq(arquivo);
             aux.exibirReg();
             i++;
@@ -139,6 +139,51 @@ public class Arquivo
 
     //.............................................................................
 
+    /// Ordenações:
+
+    public void ShellSort()
+    {
+
+        int dist = 1;
+        int i, pos;
+        int tl = filesize();
+        Registro auxReg = null;
+        Registro posReg = null;
+        while(dist < tl)
+            dist = 3 * dist + 1;
+        dist = dist/3;
+        while(dist > 0)
+        {
+            i = dist;
+            pos = i;
+            while(i < tl)
+            {
+                seekArq(i);
+                auxReg.leDoArq(arquivo);
+                if (pos-dist > 0)
+                {
+                    seekArq(pos - dist);
+                    posReg.leDoArq(arquivo);
+                }
+                //while(pos > 0 && auxReg.getNumero().compareToIgnoreCase(posReg.getNumero()) < 0)
+                {
+                    seekArq(pos);
+                    posReg.gravaNoArq(arquivo);
+                    pos = pos-dist;
+                    if (pos-dist > 0)
+                    {
+                        seekArq(pos - dist);
+                        posReg.leDoArq(arquivo);
+                    }
+                }
+                seekArq(pos);
+                auxReg.gravaNoArq(arquivo);
+                i++;
+            }
+            dist = dist/3;
+        }
+    }
+
     public void executa()
     {
         leArq();
@@ -164,7 +209,7 @@ public class Arquivo
     public void geraArqOrdenado()
     {
         this.truncate(0);
-        for (int i = 0; i < 32; i++) //1024
+        for (int i = 0; i < 1024; i++) //1024
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -173,7 +218,7 @@ public class Arquivo
     public void geraArqInverso()
     {
         this.truncate(0);
-        for (int i = 32; i > 0; i--) //1023
+        for (int i = 1023; i > 0; i--) //1023
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -184,7 +229,7 @@ public class Arquivo
     {
         this.truncate(0);
         Random random = new Random();
-        for (int i = 0; i < 32; i++) //1024
+        for (int i = 0; i < 1024; i++) //1024
         {
             int rand = random.nextInt(9999);
             Registro registro = new Registro(rand);
@@ -234,11 +279,53 @@ public class Arquivo
         }
     }
 
+    private int buscaBi(int fim, int valor)
+    {
+        int esquerda = 0;
+        int direita = fim-1;
+        int meio;
+        Registro regAux = new Registro();
 
+        while (esquerda <= direita)
+        {
+            meio = (esquerda+direita)/2;
+
+            this.seekArq(meio);
+            regAux.leDoArq(this.arquivo);
+            if(valor < regAux.getNumero())
+                direita = meio-1;
+            else
+                esquerda=meio+1;
+        }
+        return esquerda;
+    }
     // Inserção Binária
     public void insercaoBinaria()
     {
+        int valor, pos;
+        int TL = this.filesize();
+        Registro regAux = new Registro();
+        Registro reg1 = new Registro();
 
+
+        for (int i = 1; i < TL; i++)
+        {
+            this.seekArq(i);
+            regAux.leDoArq(this.arquivo);
+            valor = regAux.getNumero();
+
+            pos = buscaBi(i, valor);
+
+            for (int j = i; j > pos ; j--)
+            {
+                this.seekArq(j-1);
+                reg1.leDoArq(this.arquivo);
+                reg1.gravaNoArq(this.arquivo);
+            }
+            Registro regPos = new Registro(valor);
+            this.seekArq(pos);
+            regPos.gravaNoArq(this.arquivo);
+        }
     }
 
     // Seleção Direta
@@ -283,41 +370,168 @@ public class Arquivo
     // Bolha
     public void bolha()
     {
-        int TL = this.filesize();
-        int TL2 = TL;
+        int TL2 = this.filesize();
         boolean flag = true;
-        Registro regAux = new Registro();
         Registro reg1 = new Registro();
         Registro reg2 = new Registro();
 
         while (TL2 > 1 && flag)
         {
             flag = false;
-            for (int i = 0; i < TL2-1; i++)
+
+            for (int i = 0; i < TL2 - 1; i++)
             {
                 this.seekArq(i);
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i + 1);
+                    reg1.gravaNoArq(this.arquivo);
+
+                    flag = true;
+                }
             }
+            TL2--;
         }
     }
 
     // Shake
     public void shake()
     {
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+        Registro regAux = new Registro();
+
+        int ini=0, fim = this.filesize()-1;
+        boolean flag = true;
+
+        while (ini<fim && flag)
+        {
+            flag = false;
+            for (int i = ini; i < fim; i++)
+            {
+                this.seekArq(i);
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i+1);
+                    regAux.gravaNoArq(this.arquivo);
+
+                    flag = true;
+                }
+            }
+            fim--;
+
+            if(flag)
+            {
+                flag=false;
+
+                for (int i = fim; i > ini ; i--)
+                {
+                    this.seekArq(i-1);
+                    reg1.leDoArq(this.arquivo);
+                    reg2.leDoArq(this.arquivo);
+
+                    if(reg1.getNumero() > reg2.getNumero())
+                    {
+                        this.seekArq(i-1);
+                        reg2.gravaNoArq(this.arquivo);
+                        this.seekArq(i);
+                        reg1.gravaNoArq(this.arquivo);
+
+                        flag=true;
+                    }
+                }
+                ini++;
+            }
+        }
     }
 
     // Comb
     public void comb()
     {
+        double dG = 1.247330950103979;
+        int iGap = this.filesize();
+        boolean bDone;
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+
+        do
+        {
+            iGap = (int)((double)iGap / dG);
+
+            if (iGap < 1)
+                iGap = 1;
+
+            bDone = false;
+
+            for (int i = 0; (i + iGap) < this.filesize(); i++)
+            {
+                this.seekArq(i);
+                reg1.leDoArq(this.arquivo);
+
+                this.seekArq(i + iGap);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() > reg2.getNumero())
+                {
+                    this.seekArq(i);
+                    reg2.gravaNoArq(this.arquivo);
+
+                    this.seekArq(i + iGap);
+                    reg1.gravaNoArq(this.arquivo);
+
+                    bDone = true;
+                }
+            }
+        }
+        while (!((iGap == 1) && (!bDone)));
     }
 
     // Gnome
     public void gnome()
     {
+        int i = 0;
+        int tl = this.filesize();
+        Registro reg1 = new Registro();
+        Registro reg2 = new Registro();
+
+        while (i < tl)
+        {
+            if (i == 0)
+                i++;
+            else
+            {
+                this.seekArq(i - 1);
+                reg1.leDoArq(this.arquivo);
+                reg2.leDoArq(this.arquivo);
+
+                if (reg1.getNumero() <= reg2.getNumero())
+                    i++;
+                else
+                {
+                    this.seekArq(i - 1);
+                    reg2.gravaNoArq(this.arquivo);
+                    this.seekArq(i);
+                    reg1.gravaNoArq(this.arquivo);
+                    i--;
+                }
+            }
+        }
     }
 
     // Tim
-    public void tim()
+    public void tim() //pqp senhor cinema
     {
+
     }
 
 
@@ -326,42 +540,7 @@ public class Arquivo
     // Shell
     public void shell()
     {
-        int dist = 1;
-        int i, pos;
-        int tl = filesize();
-        Registro auxReg = new Registro();
-        Registro posReg = new Registro();
-        while(dist < tl)
-            dist = 3 * dist + 1;
-        dist = dist/3;
-        while(dist > 0)
-        {
-            i = dist;
-            while(i < tl)
-            {
-                pos = i;
-                seekArq(i);
-                auxReg.leDoArq(arquivo);
-                if (pos-dist > 0)
-                    seekArq(pos - dist);
-                posReg.leDoArq(arquivo);
-                while(pos > 0 && auxReg.getNumero() < posReg.getNumero())
-                {
-                    seekArq(pos);
-                    posReg.gravaNoArq(arquivo);
-                    pos = pos-dist;
-                    if (pos-dist > 0)
-                        seekArq(pos - dist);
-                    posReg.leDoArq(arquivo);
-                }
-                seekArq(pos);
-                auxReg.gravaNoArq(arquivo);
-                i++;
-            }
-            dist = dist/3;
-        }
     }
-
 
     // Heap
     public void heap()

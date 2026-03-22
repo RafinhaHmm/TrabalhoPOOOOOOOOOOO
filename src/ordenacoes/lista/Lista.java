@@ -496,7 +496,7 @@ public class Lista {
                     No ini2 = fim1.getProx();
                     No fim2 = AndaNo(ini2, tam2 - 1);
 
-                //    mergeTrechos(ini1, fim1, ini2, fim2);
+                //    mergeAux(ini1, fim1, ini2, fim2);
                 }
             }
 
