@@ -101,7 +101,7 @@ public class Arquivo
         i = 0;
         while (!this.eof())
         {
-            System.out.println("Posicao " + i);
+//            System.out.println("Posicao " + i);
             aux.leDoArq(arquivo);
             aux.exibirReg();
             i++;
@@ -139,52 +139,6 @@ public class Arquivo
 
     //.............................................................................
 
-    /// Ordenações:
-
-    public void ShellSort()
-    {
-
-        int dist = 1;
-        int i, pos;
-        int tl = filesize();
-        Registro auxReg = null;
-        Registro posReg = null;
-        while(dist < tl)
-            dist = 3 * dist + 1;
-        dist = dist/3;
-        while(dist > 0)
-        {
-            i = dist;
-            pos = i;
-            while(i < tl)
-            {
-                seekArq(i);
-                auxReg.leDoArq(arquivo);
-                if (pos-dist > 0)
-                {
-                    seekArq(pos - dist);
-                    posReg.leDoArq(arquivo);
-                }
-                //while(pos > 0 && auxReg.getNumero().compareToIgnoreCase(posReg.getNumero()) < 0)
-                {
-                    seekArq(pos);
-                    posReg.gravaNoArq(arquivo);
-                    pos = pos-dist;
-                    if (pos-dist > 0)
-                    {
-                        seekArq(pos - dist);
-                        posReg.leDoArq(arquivo);
-                    }
-                }
-                seekArq(pos);
-                auxReg.gravaNoArq(arquivo);
-                i++;
-            }
-            dist = dist/3;
-        }
-    }
-
-
     public void executa()
     {
         leArq();
@@ -210,7 +164,7 @@ public class Arquivo
     public void geraArqOrdenado()
     {
         this.truncate(0);
-        for (int i = 0; i < 1024; i++) //1024
+        for (int i = 0; i < 32; i++) //1024
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -219,7 +173,7 @@ public class Arquivo
     public void geraArqInverso()
     {
         this.truncate(0);
-        for (int i = 1023; i > 0; i--) //1023
+        for (int i = 32; i > 0; i--) //1023
         {
             Registro registro = new Registro(i);
             inserirRegNoFinal(registro);
@@ -230,7 +184,7 @@ public class Arquivo
     {
         this.truncate(0);
         Random random = new Random();
-        for (int i = 0; i < 1024; i++) //1024
+        for (int i = 0; i < 32; i++) //1024
         {
             int rand = random.nextInt(9999);
             Registro registro = new Registro(rand);
@@ -342,7 +296,6 @@ public class Arquivo
             for (int i = 0; i < TL2-1; i++)
             {
                 this.seekArq(i);
-                if()
             }
         }
     }
@@ -373,7 +326,42 @@ public class Arquivo
     // Shell
     public void shell()
     {
+        int dist = 1;
+        int i, pos;
+        int tl = filesize();
+        Registro auxReg = new Registro();
+        Registro posReg = new Registro();
+        while(dist < tl)
+            dist = 3 * dist + 1;
+        dist = dist/3;
+        while(dist > 0)
+        {
+            i = dist;
+            while(i < tl)
+            {
+                pos = i;
+                seekArq(i);
+                auxReg.leDoArq(arquivo);
+                if (pos-dist > 0)
+                    seekArq(pos - dist);
+                posReg.leDoArq(arquivo);
+                while(pos > 0 && auxReg.getNumero() < posReg.getNumero())
+                {
+                    seekArq(pos);
+                    posReg.gravaNoArq(arquivo);
+                    pos = pos-dist;
+                    if (pos-dist > 0)
+                        seekArq(pos - dist);
+                    posReg.leDoArq(arquivo);
+                }
+                seekArq(pos);
+                auxReg.gravaNoArq(arquivo);
+                i++;
+            }
+            dist = dist/3;
+        }
     }
+
 
     // Heap
     public void heap()

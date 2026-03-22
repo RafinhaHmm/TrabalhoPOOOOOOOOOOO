@@ -60,8 +60,7 @@ class Registro
 
     public void exibirReg()
     {
-        System.out.println("Numero..... " + numero);
-        System.out.println("----------------------------------");
+        System.out.print(" "+numero);
     }
 
     public static int length()
