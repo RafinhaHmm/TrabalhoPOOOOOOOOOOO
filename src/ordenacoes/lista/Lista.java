@@ -3,7 +3,7 @@ package ordenacoes.lista;
 import java.util.Random;
 
 public class Lista {
-    No inicio, fim;
+    public No inicio, fim;
 
     public void inicializa()
     {
