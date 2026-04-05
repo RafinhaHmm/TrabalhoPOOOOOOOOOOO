@@ -436,6 +436,45 @@ public class Lista {
         }
     }
 
+    private void merge(No ini1, No fim1, No ini2, No fim2, int[] aux)
+    {
+        No i = ini1, j = ini2;
+        int k = 0;
+
+        while (i != fim1.getProx() && j != fim2.getProx())
+        {
+            if (i.getNum() < j.getNum())
+            {
+                aux[k++] = i.getNum();
+                i = i.getProx();
+            }
+            else
+            {
+                aux[k++] = j.getNum();
+                j = j.getProx();
+            }
+        }
+
+        while (i != fim1.getProx())
+        {
+            aux[k++] = i.getNum();
+            i = i.getProx();
+        }
+
+        while (j != fim2.getProx())
+        {
+            aux[k++] = j.getNum();
+            j = j.getProx();
+        }
+
+        No p = ini1;
+        for (int l = 0; l < k; l++)
+        {
+            p.setNum(aux[l]);
+            p = p.getProx();
+        }
+    }
+
     public void Tim() //Hands-On Data Structures and Algorithms with Python | Basant Agarwal
     {
         int run = 32;
@@ -476,7 +515,8 @@ public class Lista {
                     No ini2 = fim1.getProx();
                     No fim2 = AndaNo(ini2, tam2 - 1);
 
-                //    mergeAux(ini1, fim1, ini2, fim2);
+                    int[] aux = new int[tam1 + tam2];
+                    merge(ini1, fim1, ini2, fim2, aux);
                 }
             }
 
