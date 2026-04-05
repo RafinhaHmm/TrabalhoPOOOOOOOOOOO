@@ -3,7 +3,7 @@ package ordenacoes.lista;
 import java.util.Random;
 
 public class Lista {
-    No inicio, fim;
+    public No inicio, fim;
 
     public void inicializa()
     {
@@ -17,6 +17,13 @@ public class Lista {
         no.setAnt(null);
         return no;
     }
+
+    private void GeraListaAux(Lista aux, int tl)
+    {
+        for (int i = 0; i < tl; i++)
+            aux.insereInicio(0);
+    }
+
     public void insereInicio(int num)
     {
         No no = criaNo(num);
@@ -60,7 +67,7 @@ public class Lista {
 
         for (int i = 1; i < 33; i++)
         {
-            int num = rand.nextInt(99);
+            int num = rand.nextInt(32);
             this.insereInicio(num);
         }
     }
@@ -88,6 +95,19 @@ public class Lista {
             i++;
         }
         return i;
+    }
+
+    private int Maior()
+    {
+        No aux = inicio;
+        int maior = 0;
+        while (aux != null)
+        {
+            if (aux.getNum() > maior)
+                maior = aux.getNum();
+            aux = aux.getProx();
+        }
+        return maior;
     }
 
     /** Metodo para andar uma quantidade de nodulos na lista começando de "aux"
@@ -666,10 +686,7 @@ public class Lista {
         while(seq < Total())
         {
             particaoImp1(l1,l2);
-            this.exibe("lista");
             fusaoImp1(l1,l2,seq);
-            l1.exibe("lista1");
-            l2.exibe("lista2");
             seq = seq * 2;
         }
     }
@@ -732,14 +749,169 @@ public class Lista {
         }
     }
 
-    public void FusaoDiretaImp2(){}
+    public void FusaoDiretaImp2()
+    {
+        int tl = Total();
+        int[] vet = new int[tl];
+        fusaoImp2(inicio,fim,tl/2,vet);
+    }
+
+    private void fusaoImp2(No esq, No dir, int qtd, int[] aux)
+    {
+        if (esq != dir)
+        {
+            No meio = AndaNo(esq,qtd);
+            fusaoImp2(esq,meio,qtd/2, aux);
+            if (meio != null) {
+                fusaoImp2(meio.getProx(), dir, qtd / 2, aux);
+                merge(esq, meio.getProx(), meio.getProx(), dir.getProx(), aux);
+            }
+        }
+    }
+
+    private void merge(No ini1, No fim1, No ini2, No fim2, int[] aux) {
+        No i = ini1;
+        No j = ini2;
+        int k = 0;
+        while(i != fim1 && j != null && j != fim2)
+        {
+            if (i.getNum() < j.getNum()){
+                aux[k++] = i.getNum();
+                i = i.getProx();
+            }
+            else
+            {
+                aux[k++] = j.getNum();
+                j = j.getProx();
+            }
+        }
+        while (i != fim1){
+            aux[k++] = i.getNum();
+            i = i.getProx();
+        }
+        while (j != null &&j != fim2){
+            aux[k++] = j.getNum();
+            j = j.getProx();
+        }
+        No auxLista = ini1;
+        for (int l = 0; l < k; l++) {
+            auxLista.setNum(aux[l]);
+            auxLista = auxLista.getProx();
+        }
+    }
 
     public void Counting()
     {
-
+        No aux = inicio;
+        int tl = Maior();
+        int[] contV = new int[tl+1];
+        while (aux != null)
+        {
+            contV[aux.getNum()]++;
+            aux = aux.getProx();
+        }
+        for (int i = 1; i < tl+1; i++)
+            contV[i] += contV[i - 1];
+        Lista respList = new Lista();
+        GeraListaAux(respList,Total());
+        aux = fim;
+        No auxResp = respList.inicio;
+        contV[aux.getNum()]--;
+        auxResp = AndaNo(auxResp,contV[aux.getNum()]);
+        auxResp.setNum(aux.getNum());
+        aux = aux.getAnt();
+        while (aux != null)
+        {
+            contV[aux.getNum()]--;
+            auxResp = AndaNo(auxResp,contV[aux.getNum()] - contV[aux.getProx().getNum()]);
+            auxResp.setNum(aux.getNum());
+            aux = aux.getAnt();
+        }
+        this.inicio = respList.inicio;
+        this.fim = respList.fim;
     }
 
-    public void Bucket(){}
+    public void Bucket()
+    {
+        int n = 10;
+        Lista[] hash = new Lista[n];
+        No aux = inicio;
+        int maior = Maior();
+        while (aux != null)
+        {
+            int posHash = aux.getNum() * n / (maior+1);
+            if (hash[posHash] == null) {
+                hash[posHash] = new Lista();
+                hash[posHash].inicializa();
+            }
+            hash[posHash].insereInicio(aux.getNum());
+            aux = aux.getProx();
+        }
+        for (int i = 0; i < n; i++) {
+            if (hash[i].inicio != null)
+                hash[i].QuickSemPivo();
+        }
+        aux = inicio;
+        int i = 0;
+        while (aux != null)
+        {
+            if (hash[i] != null) {
+                No auxBucket = hash[i++].inicio;
+                while (auxBucket != null) {
+                    aux.setNum(auxBucket.getNum());
+                    aux = aux.getProx();
+                    auxBucket = auxBucket.getProx();
+                }
+            }
+            else
+                i++;
+        }
+    }
 
-    public void Radix(){}
+    public void Radix()
+    {
+        Lista resp = new Lista();
+        resp.inicializa();
+        GeraListaAux(resp,Total());
+        int m = Maior();
+        for (int exp = 1; m/ exp > 0; exp *= 10)
+            CountRadix(exp,resp);
+    }
+
+    private void CountRadix(int exp, Lista resp)
+    {
+        No aux = inicio;
+        int tl = 9;
+        int[] contV = new int[tl+1];
+        while (aux != null)
+        {
+            contV[(aux.getNum() / exp) % 10]++;
+            aux = aux.getProx();
+        }
+        for (int i = 1; i < tl+1; i++)
+            contV[i] += contV[i - 1];
+        aux = fim;
+        No auxResp = resp.inicio;
+        int pos = (aux.getNum() / exp) % 10;
+        contV[pos]--;
+        auxResp = AndaNo(auxResp,contV[pos]);
+        auxResp.setNum(aux.getNum());
+        aux = aux.getAnt();
+        while (aux != null)
+        {
+            int ant = pos;
+            pos = (aux.getNum() / exp) % 10;
+            contV[pos]--;
+            auxResp = AndaNo(auxResp,contV[pos] - contV[ant]);
+            auxResp.setNum(aux.getNum());
+            aux = aux.getAnt();
+        }
+        aux = inicio;
+        auxResp = resp.inicio;
+        while (aux != null){
+            aux.setNum(auxResp.getNum());
+            aux = aux.getProx();
+            auxResp = auxResp.getProx();
+        }
+    }
 }
