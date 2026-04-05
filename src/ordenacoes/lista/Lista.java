@@ -614,9 +614,9 @@ public class Lista {
         int aux;
         while(i != j && i.getAnt() != j)
         {
-            while(i.getNum() < pivo)
+            while(i.getProx() != null && i.getNum() < pivo)
                 i = i.getProx();
-            while(j.getNum() > pivo)
+            while(j.getAnt() != null && j.getNum() > pivo)
                 j = j.getAnt();
             if(i.getAnt() != j)
             {
@@ -627,9 +627,9 @@ public class Lista {
                 j = j.getAnt();
             }
         }
-        if(inicio != j)
+        if(j != inicio && inicio != j.getProx())
             QuickComPivo(inicio,j);
-        if(fim != i)
+        if(fim != i && i.getAnt() != fim)
             QuickComPivo(i,fim);
     }
 
@@ -808,7 +808,7 @@ public class Lista {
             aux = aux.getProx();
         }
         for (int i = 0; i < n; i++) {
-            if (hash[i].inicio != null)
+            if (hash[i] != null && hash[i].inicio != null)
                 hash[i].QuickSemPivo();
         }
         aux = inicio;
@@ -862,7 +862,8 @@ public class Lista {
             int ant = pos;
             pos = (aux.getNum() / exp) % 10;
             contV[pos]--;
-            auxResp = AndaNo(auxResp,contV[pos] - contV[ant]);
+            //auxResp = AndaNo(auxResp,contV[pos] - contV[ant]);
+            auxResp = AndaNo(resp.inicio, contV[pos]);
             auxResp.setNum(aux.getNum());
             aux = aux.getAnt();
         }
