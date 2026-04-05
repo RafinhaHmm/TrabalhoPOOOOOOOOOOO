@@ -1,8 +1,8 @@
-import ordenacoes.lista.Lista;
+package ordenacoes.lista;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Principal {
+public class PrincipalLista {
     public static void main(String[] args)
     {
         Lista lista = new Lista();

@@ -2,7 +2,7 @@ package ordenacoes.arquivo;
 
 import java.io.*;
 
-public class Principal
+public class PrincipalArquivo
 {
     private Arquivo arqOrd, arqRev, arqRand, auxRev, auxRand;
     private long tini, tfim;
@@ -11,7 +11,7 @@ public class Principal
     private int movO, movRev, movRand;
     private static String arqResp = "resultado.txt";
 
-    public Principal()
+    public PrincipalArquivo()
     {
         arqOrd = new Arquivo("arqOrd.dat");
         arqRev = new Arquivo("arqRev.dat");
@@ -812,7 +812,7 @@ public class Principal
 
     public static void main(String args[])
     {
-        Principal p = new Principal();
+        PrincipalArquivo p = new PrincipalArquivo();
         p.geraTabela();
     }
 }

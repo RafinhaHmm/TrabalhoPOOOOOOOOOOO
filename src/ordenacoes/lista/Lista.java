@@ -456,7 +456,7 @@ public class Lista {
         }
     }
 
-    private void merge(No ini1, No fim1, No ini2, No fim2, int[] aux)
+    private void mergeAux(No ini1, No fim1, No ini2, No fim2, int[] aux)
     {
         No i = ini1, j = ini2;
         int k = 0;
@@ -536,7 +536,7 @@ public class Lista {
                     No fim2 = AndaNo(ini2, tam2 - 1);
 
                     int[] aux = new int[tam1 + tam2];
-                    merge(ini1, fim1, ini2, fim2, aux);
+                    mergeAux(ini1, fim1, ini2, fim2, aux);
                 }
             }
 
@@ -578,39 +578,47 @@ public class Lista {
     public void HeapSort()
     {
         int tlAux = Total();
-        int SubTree;
-        No pai;
-        No filho1;
-        No filho2;
-        No maiorFilho;
-        int valorAux;
+        int pai;
+        int filho1;
+        int filho2;
+        int maiorFilho;
+        No noPai = new No(0);
+        No noFilho1 = new No(0);
+        No noFilho2 = new No(0);
+        No noMaiorFilho = new No(0);
         while(tlAux > 1)
         {
-            pai = AndaNo(inicio,tlAux / 2 - 1);
-            SubTree = tlAux / 2 - 1;
-            while(pai != null)
+            pai = tlAux / 2 - 1;
+            while(pai >= 0)
             {
-                filho1 = AndaNo(pai,SubTree);
-                if (filho1 != null)
+                filho1 = 2 * pai + 1;
+                filho2 = filho1 + 1;
+                noPai = getNo(pai);
+                noFilho1 = getNo(filho1);
+                maiorFilho = filho1;
+                if (filho2 < tlAux)
                 {
-                    maiorFilho = filho1;
-                    filho2 = filho1.getProx();
-                    if (filho2 != null && filho1.getNum() < filho2.getNum())
+                    noFilho2 = getNo(filho2);
+                    if (noFilho1 != null && noFilho2 != null && noFilho1.getNum() < noFilho2.getNum())
                         maiorFilho = filho2;
-                    if (pai.getNum() < maiorFilho.getNum()) {
-                        valorAux = pai.getNum();
-                        pai.setNum(maiorFilho.getNum());
-                        maiorFilho.setNum(valorAux);
-                    }
                 }
-                SubTree--;
-                pai = pai.getAnt();
+                noMaiorFilho = getNo(maiorFilho);
+                if (noPai != null && noMaiorFilho != null && noPai.getNum() < noMaiorFilho.getNum())
+                {
+                    int valorAux = noPai.getNum();
+                    noPai.setNum(noMaiorFilho.getNum());
+                    noMaiorFilho.setNum(valorAux);
+                }
+                pai--;
             }
             tlAux--;
-            pai = AndaNo(inicio,tlAux);
-            valorAux = inicio.getNum();
-            inicio.setNum(pai.getNum());
-            pai.setNum(valorAux);
+            noPai = getNo(tlAux);
+            if (inicio != null && noPai != null)
+            {
+                int valorAux = inicio.getNum();
+                inicio.setNum(noPai.getNum());
+                noPai.setNum(valorAux);
+            }
         }
     }
 
@@ -648,29 +656,49 @@ public class Lista {
 
     private void QuickComPivo(No inicio, No fim)
     {
-        No i = inicio;
-        No j = fim;
-        int pivo = fim.getNum();
-        int aux;
-        while(i != j && i.getAnt() != j)
+        No i = inicio, j = fim;
+        int aux, pivo;
+        boolean flag = false;
+
+        if (inicio == null || fim == null || inicio == fim || inicio.getAnt() == fim)
+            flag = true;
+
+        if (!flag)
         {
-            while(i.getNum() < pivo)
-                i = i.getProx();
-            while(j.getNum() > pivo)
-                j = j.getAnt();
-            if(i.getAnt() != j)
+            pivo = fim.getNum();
+
+            while (i != null && j != null && i != j && i.getAnt() != j)
             {
-                aux = i.getNum();
-                i.setNum(j.getNum());
-                j.setNum(aux);
-                i = i.getProx();
-                j = j.getAnt();
+                while (i != null && i.getNum() < pivo)
+                    i = i.getProx();
+
+                while (j != null && j.getNum() > pivo)
+                    j = j.getAnt();
+
+                if (i != null && j != null && i != j && i.getAnt() != j)
+                {
+                    aux = i.getNum();
+                    i.setNum(j.getNum());
+                    j.setNum(aux);
+                    i = i.getProx();
+                    j = j.getAnt();
+                }
             }
+
+            No fimEsq = j;
+            if (fimEsq != null && fimEsq == fim)
+                fimEsq = fimEsq.getAnt();
+
+            No iniDir = i;
+            if (iniDir != null && iniDir == inicio)
+                iniDir = iniDir.getProx();
+
+            if (inicio != null && fimEsq != null && inicio != fimEsq && inicio.getAnt() != fimEsq)
+                QuickComPivo(inicio, fimEsq);
+
+            if (iniDir != null && fim != null && iniDir != fim && iniDir.getAnt() != fim)
+                QuickComPivo(iniDir, fim);
         }
-        if(inicio != j)
-            QuickComPivo(inicio,j);
-        if(fim != i)
-            QuickComPivo(i,fim);
     }
 
     public void QuickComPivo()
@@ -817,13 +845,13 @@ public class Lista {
         aux = fim;
         No auxResp = respList.inicio;
         contV[aux.getNum()]--;
-        auxResp = AndaNo(auxResp,contV[aux.getNum()]);
+        auxResp = AndaNo(respList.inicio, contV[aux.getNum()]);
         auxResp.setNum(aux.getNum());
         aux = aux.getAnt();
         while (aux != null)
         {
             contV[aux.getNum()]--;
-            auxResp = AndaNo(auxResp,contV[aux.getNum()] - contV[aux.getProx().getNum()]);
+            auxResp = AndaNo(respList.inicio, contV[aux.getNum()]);
             auxResp.setNum(aux.getNum());
             aux = aux.getAnt();
         }
@@ -835,36 +863,32 @@ public class Lista {
     {
         int n = 10;
         Lista[] hash = new Lista[n];
+        for (int i = 0; i < n; i++) {
+            hash[i] = new Lista();
+            hash[i].inicializa();
+        }
         No aux = inicio;
         int maior = Maior();
         while (aux != null)
         {
             int posHash = aux.getNum() * n / (maior+1);
-            if (hash[posHash] == null) {
-                hash[posHash] = new Lista();
-                hash[posHash].inicializa();
-            }
             hash[posHash].insereInicio(aux.getNum());
             aux = aux.getProx();
         }
         for (int i = 0; i < n; i++) {
-            if (hash[i].inicio != null)
+            if (hash[i] != null && hash[i].inicio != null)
                 hash[i].QuickSemPivo();
         }
         aux = inicio;
-        int i = 0;
-        while (aux != null)
+        for (int i = 0; i < n; i++)
         {
-            if (hash[i] != null) {
-                No auxBucket = hash[i++].inicio;
-                while (auxBucket != null) {
-                    aux.setNum(auxBucket.getNum());
-                    aux = aux.getProx();
-                    auxBucket = auxBucket.getProx();
-                }
+            No auxBucket = hash[i].inicio;
+            while (auxBucket != null && aux != null)
+            {
+                aux.setNum(auxBucket.getNum());
+                aux = aux.getProx();
+                auxBucket = auxBucket.getProx();
             }
-            else
-                i++;
         }
     }
 
@@ -881,33 +905,25 @@ public class Lista {
     private void CountRadix(int exp, Lista resp)
     {
         No aux = inicio;
-        int tl = 9;
-        int[] contV = new int[tl+1];
+        int[] contV = new int[10];
         while (aux != null)
         {
             contV[(aux.getNum() / exp) % 10]++;
             aux = aux.getProx();
         }
-        for (int i = 1; i < tl+1; i++)
+        for (int i = 1; i < 10; i++)
             contV[i] += contV[i - 1];
         aux = fim;
-        No auxResp = resp.inicio;
-        int pos = (aux.getNum() / exp) % 10;
-        contV[pos]--;
-        auxResp = AndaNo(auxResp,contV[pos]);
-        auxResp.setNum(aux.getNum());
-        aux = aux.getAnt();
         while (aux != null)
         {
-            int ant = pos;
-            pos = (aux.getNum() / exp) % 10;
+            int pos = (aux.getNum() / exp) % 10;
             contV[pos]--;
-            auxResp = AndaNo(auxResp,contV[pos] - contV[ant]);
+            No auxResp = AndaNo(resp.inicio, contV[pos]);
             auxResp.setNum(aux.getNum());
             aux = aux.getAnt();
         }
         aux = inicio;
-        auxResp = resp.inicio;
+        No auxResp = resp.inicio;
         while (aux != null){
             aux.setNum(auxResp.getNum());
             aux = aux.getProx();
